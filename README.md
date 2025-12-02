@@ -1,126 +1,119 @@
-**Real-Time Room Environment Monitor (ESP32 AP & Client)**
+# Real-Time Room Environment Monitor
 
-This project implements a distributed environmental monitoring system using two ESP32 microcontrollers. One ESP32 acts as a Server and Access Point (AP), while the second acts as a Client, connecting to the AP to report its sensor readings. The Server aggregates data, handles system alarms, manages persistent configuration thresholds, and provides a web-based dashboard for control and viewing.
+### Distributed ESP32 Sensor Network & Centralized Dashboard
 
-**System Architecture**
-The system consists of two main components running dedicated code:
+## Project Overview
 
-_Server ESP32 (Room 1):_
+This project implements a robust, distributed environmental monitoring framework using a dual-node ESP32 architecture. It features a **Server Node** (Access Point) acting as the central controller and a **Client Node** acting as a remote telemetry station.
 
-    Creates a Wi-Fi Access Point (RoomMonitor).
-    Reads its local sensors (Temp, Hum, Air Quality).
-    Hosts a Web UI for monitoring and setting thresholds.
-    Receives and processes data from the Client ESP32.
-    Controls its local LCD and buzzer for real-time status and alarming.
+The system aggregates real-time data (Temperature, Humidity, Air Quality) from multiple physical locations, hosting a local Web Dashboard for visualization, remote messaging, and dynamic alarm configuration.
 
-_Client ESP32 (Room 2):_
+## Key Features
 
-    Connects to the Server's AP (RoomMonitor).
-    Reads its local sensors (Temp, Hum, Air Quality).
-    POSTs its data (JSON payload) to the Server every 5 seconds.
-    Receives configuration (like the Air Quality alarm threshold) and messages from the Server in the response.
-    Displays local sensor data and scrolling messages on its LCD.
+* **Dual-Node Architecture:** Distinguishes between a central Server and a remote Client for covered area expansion.
+* **Centralized Web Dashboard:** A responsive HTML interface hosted on the ESP32 for monitoring both nodes simultaneously.
+* **Bi-Directional Communication:** The Client sends sensor data via HTTP POST, while the Server responds with alarm configurations and text messages.
+* **Persistent Configuration:** Alarm thresholds are saved in Non-Volatile Memory (Preferences), ensuring settings remain after power cycles.
+* **Real-Time Alarms:** Immediate visual and audible feedback triggers when environmental metrics exceed defined safety limits.
 
-**Hardware Requirements**
-The project requires several hardware components, with two of each main item for the dual-room setup (Server and Client):
+---
 
-    2 ESP32 Dev Boards (one for the Server, one for the Client).
-    2 DHT11 Sensors for measuring Temperature and Humidity.
-    2 MQ-135 Sensors for monitoring Air Quality.
-    2 I2C 16x2 LCDs for displaying status and messages.
-    2 Buzzers for alarm and status feedback.
+## System Architecture
 
-**Pin Assignments (Check both code files)**
-The hardware components share the following specific pin assignments across both the Server and Client boards:
+The firmware is divided into two distinct roles running on identical hardware configurations.
 
-_DHT Data Pin: D4_
+### 1. Server Node (Room 1)
+* **Network Host:** Establishes the `RoomMonitor` Wi-Fi Access Point.
+* **Aggregator:** Collects local sensor data and processes incoming JSON payloads from the Client.
+* **Interface:** Hosts the Web UI.
+* **Feedback:** Controls the primary alarm buzzer.
 
-_MQ-135 Analog Pin: D34_
+### 2. Client Node (Room 2)
+* **Remote Station:** Automatically bridges to the Server's AP.
+* **Telemetry:** Captures local metrics and transmits data every 5 seconds.
+* **Display:** Renders global messages received from the Server.
 
-_Buzzer Pin: D13_
+---
 
-_I2C (SDA/SCL): Standard ESP32 I2C Pins (usually D21/D22)._
+## Hardware Configuration
 
-**Software and Dependencies**
-The project uses the following standard Arduino libraries. Ensure they are installed in your Arduino IDE:
+### Component Bill of Materials
+* 2x ESP32 Development Boards
+* 2x DHT11 Sensors (Temperature & Humidity)
+* 2x MQ-135 Sensors (Air Quality)
+* 2x I2C LCD Displays (16x2)
+* 2x Active Buzzers
 
-    WiFi (Built-in)
-    WebServer (Built-in)
-    Wire (Built-in for I2C)
-    LiquidCrystal_I2C (Install via Library Manager)
-    DHT (Install via Library Manager)
-    ArduinoJson (Version 6 or later recommended - Install via Library Manager)
-    Preferences (Built-in - Server only for saving thresholds)
-    HTTPClient (Built-in - Client only for communication)
+### Pin Map
+The wiring is standardized across both Server and Client nodes.
 
-**Setup and Configuration**
-1. Wi-Fi Credentials
-For the system to communicate, the following Wi-Fi and access credentials must be set correctly in both the Server and Client code:
+| Component | Interface | ESP32 GPIO |
+| :--- | :--- | :--- |
+| **DHT11** | Digital Data | `D4` |
+| **MQ-135** | Analog Input | `D34` |
+| **Buzzer** | Digital I/O | `D13` |
+| **I2C LCD** | SDA | `D21` |
+| **I2C LCD** | SCL | `D22` |
 
-      a.AP/Client SSID: "RoomMonitor"
-   
-      b.AP/Client Password: "12345678"
-   
-      c.Server Web Password (for dashboard login): "status@V!t"
-   
-      d.Server IP: "192.168.4.1" (This is the Server's Access Point IP address).
+---
 
-**Note: You must upload the client.ino code to the first ESP32 and the ESP32_Server_Final.ino (the provided server code) to the second ESP32.**
+## Software Dependencies
 
-2. Uploading the Code
-   
-     a.Open the Server code (ESP32_Server_Final.ino) in the Arduino IDE.
-   
-     b.Select the correct ESP32 board and COM port.
-   
-     c.Upload the code.
-   
-     d.Open the Client code (client.ino) in the Arduino IDE.
-   
-     e.Select the correct ESP32 board and COM port.
-   
-     f.Upload the code.
+Ensure the following libraries are installed in your Arduino IDE environment:
 
-**Operation**
+* **WiFi** (Built-in)
+* **WebServer** (Built-in)
+* **HTTPClient** (Built-in)
+* **Wire** (Built-in)
+* **Preferences** (Built-in)
+* **LiquidCrystal_I2C**
+* **DHT sensor library**
+* **ArduinoJson** (Version 6.x or higher)
 
-Server Initialization
+---
 
-    After booting, the Server ESP32 will create the RoomMonitor Wi-Fi network.
-    
-    The Server's LCD will display Room 1 sensor data on Line 1.
+## Setup & Deployment
 
-Client Connection
+### 1. Network Credentials
+The following credentials are hardcoded into the firmware for node-to-node handshakes.
 
-    The Client ESP32 will automatically connect to the RoomMonitor network.
-    
-    The Client's LCD will display Room 2 sensor data on Line 1.
+* **SSID:** `RoomMonitor`
+* **Password:** `12345678`
 
-Web Interface Usage
+### 2. Uploading Firmware
 
-    Connect your PC or phone to the RoomMonitor Wi-Fi network.
-    
-    Open a web browser and navigate to the Server's IP address: http://192.168.4.1/
-    
-    Log in using the configured web password: status@V!t
+**Server Node:**
+1.  Open `ESP32_Server_Final.ino`.
+2.  Connect the primary ESP32.
+3.  Select Board/Port and Upload.
 
-Key Web UI Controls:
+**Client Node:**
+1.  Open `client.ino`.
+2.  Connect the secondary ESP32.
+3.  Select Board/Port and Upload.
 
-    The web interface provides the following key controls and monitoring features:
-    
-    a.Room 1 (Server): Displays live sensor data and the current alarm status for the server's local environment.
-    
-    b.Room 2 (Client): Displays live sensor data and the current alarm status reported by the remote client.
-    
-    c.Message: Allows you to send a scrolling text message to the LCD of Room 1, Room 2, or both simultaneously.
-    
-    d.Thresholds: Used to adjust the Temperature, Humidity, and Air Quality values that trigger an alarm for both rooms. These updated settings are persistent and saved to the ESP32's flash memory.
+---
 
-Alarming
+## Operational Manual
 
-    An alarm state is triggered if Temperature, Humidity, or Air Quality in either room exceeds the configured threshold.
-    
-    LCD Alert: Both Server and Client LCDs will show !! EVACUATE - ALERT on Line 2.
+### Accessing the Dashboard
+1.  Connect your PC or Mobile device to the Wi-Fi network: **RoomMonitor**.
+2.  Navigate to: `http://192.168.4.1`.
+3.  Login using the Web Password: `status@V!t`.
 
-Buzzer: The Server's buzzer will sound continuously.
+### Dashboard Controls
+* **Live Data:** View cards for Room 1 (Local) and Room 2 (Remote).
+* **Message:** Broadcast scrolling text to specific LCDs.
+* **Thresholds:** Update trigger points for alarms. These are saved to flash memory.
 
-Status Beep: If no alarm is active, the Server's buzzer will produce a single short beep every 5 seconds, confirming a successful data update.
+### Alarm States
+* **Normal Operation:** The Server emits a single confidence beep every 5 seconds (Heartbeat).
+* **Critical Alert:** If any sensor exceeds the threshold:
+    * LCDs display: `!! EVACUATE - ALERT`
+    * Server Buzzer sounds continuously.
+
+---
+
+## License
+
+This project is open-source and available for modification and distribution.
