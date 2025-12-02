@@ -293,7 +293,7 @@ When any sensor exceeds the configured threshold:
 <img src="https://img.shields.io/badge/Maitry-Mohite-orange?style=for-the-badge&logo=github" alt="Maitry Mohite"/>
 </a>
 <br/>
-<a href="https://www.linkedin.com/in/shrutmpatil/">
+<a href="https://www.linkedin.com/in/maitry-mohite-2560422b4/">
 <img src="https://img.icons8.com/color/48/000000/linkedin.png" width="40"/>
 </a>
 </td>
@@ -302,7 +302,7 @@ When any sensor exceeds the configured threshold:
 <img src="https://img.shields.io/badge/Tanvi-Yerram-pink?style=for-the-badge&logo=github" alt="Tanvi Yerram"/>
 </a>
 <br/>
-<a href="https://www.linkedin.com/in/shrutmpatil/">
+<a href="https://www.linkedin.com/in/tanvi-yerram-552789304/">
 <img src="https://img.icons8.com/color/48/000000/linkedin.png" width="40"/>
 </a>
 </td>
