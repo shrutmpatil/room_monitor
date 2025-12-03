@@ -262,7 +262,7 @@ When any sensor exceeds the configured threshold:
 
 ---
 
-## 👥 Collaborators
+## Collaborators
 
 <div align="center">
 
