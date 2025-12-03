@@ -280,7 +280,7 @@ When any sensor exceeds the configured threshold:
 </a>
 </td>
 <td align="center">
-<a href="https://github.com/siddhilad920">
+<a href="https://github.com/siddhivlad">
 <img src="https://img.shields.io/badge/Siddhi-Lad-lightgrey?style=for-the-badge&logo=github" alt="Siddhi Lad"/>
 </a>
 <br/>
@@ -289,7 +289,7 @@ When any sensor exceeds the configured threshold:
 </a>
 </td>
 <td align="center">
-<a href="https://github.com/shrutmpatil">
+<a href="https://github.com/maitry-mohite">
 <img src="https://img.shields.io/badge/Maitry-Mohite-orange?style=for-the-badge&logo=github" alt="Maitry Mohite"/>
 </a>
 <br/>
@@ -298,7 +298,7 @@ When any sensor exceeds the configured threshold:
 </a>
 </td>
 <td align="center">
-<a href="https://github.com/shrutmpatil">
+<a href="https://github.com/tanviyerram08">
 <img src="https://img.shields.io/badge/Tanvi-Yerram-pink?style=for-the-badge&logo=github" alt="Tanvi Yerram"/>
 </a>
 <br/>
